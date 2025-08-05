@@ -1,11 +1,11 @@
 # AquaShell Half-Life Classic Soundboard 'Horror' sound manager script file
 
 const iBtnHorrorPosX int <= 55;
-const iBtnHorrorPosY int <= 502;
+const iBtnHorrorPosY int <= 522;
 const iBtnHorrorWidth int <= 190;
 const iBtnHorrorHeight int <= 45;
 const iTxtHorrorX int <= 100;
-const iTxtHorrorY int <= 512;
+const iTxtHorrorY int <= 532;
 const szLabelHorror string <= "HORROR";
 
 global hSprHorror int;

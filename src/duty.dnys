@@ -1,11 +1,11 @@
 # AquaShell Half-Life Classic Soundboard 'Duty' sound manager script file
 
 const iBtnDutyPosX int <= 55;
-const iBtnDutyPosY int <= 369;
+const iBtnDutyPosY int <= 389;
 const iBtnDutyWidth int <= 190;
 const iBtnDutyHeight int <= 45;
 const iTxtDutyX int <= 115;
-const iTxtDutyY int <= 379;
+const iTxtDutyY int <= 399;
 const szLabelDuty string <= "DUTY";
 
 global hSprDuty int;

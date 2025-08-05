@@ -1,11 +1,11 @@
 # AquaShell Half-Life Classic Soundboard 'Computalk' sound manager script file
 
 const iBtnComputalkPosX int <= 350;
-const iBtnComputalkPosY int <= 300;
+const iBtnComputalkPosY int <= 320;
 const iBtnComputalkWidth int <= 190;
 const iBtnComputalkHeight int <= 45;
 const iTxtComputalkX int <= 375;
-const iTxtComputalkY int <= 309;
+const iTxtComputalkY int <= 329;
 const szLabelComputalk string <= "COMPUTALK";
 
 global hSprComputalk int;

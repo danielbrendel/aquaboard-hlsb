@@ -1,11 +1,11 @@
 # AquaShell Half-Life Classic Soundboard 'Choose' sound manager script file
 
 const iBtnChoosePosX int <= 55;
-const iBtnChoosePosY int <= 300;
+const iBtnChoosePosY int <= 320;
 const iBtnChooseWidth int <= 190;
 const iBtnChooseHeight int <= 45;
 const iTxtChooseX int <= 102;
-const iTxtChooseY int <= 309;
+const iTxtChooseY int <= 329;
 const szLabelChoose string <= "CHOOSE";
 
 global hSprChoose int;

@@ -1,11 +1,11 @@
 # AquaShell Half-Life Classic Soundboard 'Greetings' sound manager script file
 
 const iBtnGreetingsPosX int <= 55;
-const iBtnGreetingsPosY int <= 436;
+const iBtnGreetingsPosY int <= 456;
 const iBtnGreetingsWidth int <= 190;
 const iBtnGreetingsHeight int <= 45;
 const iTxtGreetingsX int <= 83;
-const iTxtGreetingsY int <= 447;
+const iTxtGreetingsY int <= 467;
 const szLabelGreetings string <= "GREETINGS";
 
 global hSprGreetings int;

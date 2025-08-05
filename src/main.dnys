@@ -13,16 +13,23 @@ const WND_RES_X int <= 600;
 const WND_RES_Y int <= 800;
 const INVALID_DX_HANDLE int <= -1;
 const GLOBAL_VOLUME int <= 10;
+const INFO_WEBSITE string <= "www.aquashell-scripting.com";
 
 global szScriptPath string;
 global szSpritePath string;
 global szSoundPath string;
 global bDxValid bool;
 global hDefFont int;
+global hInfoFont int;
 global hOverlay int;
 global hBanner int;
 global iMouseXPos int;
 global iMouseYPos int;
+global bLinkHover bool;
+global iLinkXPos int;
+global iLinkYPos int;
+global iLinkWidth int;
+global iLinkHeight int;
 
 array arrSoundScriptItems string 10 (
 	"alien",
@@ -46,6 +53,41 @@ for (i, 0, %arrSoundScriptItems.length, -inc) {
 	exec "%szScriptPath/%arrSoundScriptItems[%i].dnys";
 };
 
+set iLinkXPos <= 159;
+set iLinkYPos <= 750;
+set iLinkWidth <= 235;
+set iLinkHeight <= -15;
+
+function checkLinkRange bool()
+{
+	result false;
+
+	local corrlnkx int;
+	local corrlnky int;
+	local chklnkwidth int;
+	local chklnkheight int;
+
+	set corrlnkx <= %iLinkXPos;
+	set corrlnky <= %iLinkYPos;
+	set chklnkwidth <= %iLinkXPos;
+	set chklnkheight <= %iLinkYPos;
+
+	-= corrlnkx 5;
+	-= corrlnky 50;
+	+= chklnkwidth %iLinkWidth;
+	+= chklnkheight %iLinkHeight;
+
+	if (%iMouseXPos, -gr, %corrlnkx) {
+		if (%iMouseXPos, -ls, %chklnkwidth) {
+			if (%iMouseYPos, -gr, %corrlnky) {
+				if (%iMouseYPos, -ls, %chklnkheight) {
+					result true;
+				};
+			};
+		};
+	};
+};
+
 function DXWND_OnCreate void(hWnd int)
 {
     local bGfxInit bool;
@@ -56,9 +98,7 @@ function DXWND_OnCreate void(hWnd int)
     dx.snd.initialize %hWnd;
 
     dx.gfx.loadfont "Verdana" 12 25 hDefFont;
-    if (%hDefFont, -eq, %INVALID_DX_HANDLE) {
-        print "Failed to load font!";
-    };
+	dx.gfx.loadfont "Verdana" 8 20 hInfoFont;
 	
 	dx.gfx.setbgimage "%szSpritePath/background.png";
 	
@@ -74,11 +114,12 @@ function DXWND_OnCreate void(hWnd int)
 
 function DXWND_OnDraw void()
 {
-	local iBarXPos int;
-	local iCenterXPos int;
-	local iCenterYPos int;
-	local iLabelHoverColor int;
-	
+	local iLinkColorRed int;
+	local iLinkColorGreen int;
+	local iLinkColorBlue int;
+	local iLinkUnderlineX int;
+	local iLinkUnderlineY int;
+
     dx.gfx.drawbegin;
 
 	dx.gfx.drawsprite %hOverlay 1 1 0 0.0 0.0 true 0 0 0 150;
@@ -86,6 +127,29 @@ function DXWND_OnDraw void()
 	
 	for (i, 0, %arrSoundScriptItems.length, -inc) {
 		call drawButton_%arrSoundScriptItems[%i]() => void;
+	};
+
+	call checkLinkRange() => bLinkHover;
+	if (%bLinkHover, -eq, true) {
+		set iLinkColorRed <= 255;
+		set iLinkColorGreen <= 185;
+		set iLinkColorBlue <= 90;
+	} else {
+		set iLinkColorRed <= 255;
+		set iLinkColorGreen <= 165;
+		set iLinkColorBlue <= 70;
+	};
+
+	dx.gfx.drawstring %hInfoFont "This project is fan-made and is not affiliated with Valve or Steam" 30 710 255 255 255 255;
+	dx.gfx.drawstring %hInfoFont %INFO_WEBSITE %iLinkXPos %iLinkYPos %iLinkColorRed %iLinkColorGreen %iLinkColorBlue 255;
+
+	if (%bLinkHover, -eq, true) {
+		set iLinkUnderlineX <= %iLinkXPos;
+		set iLinkUnderlineY <= %iLinkYPos;
+
+		+= iLinkUnderlineY 22;
+
+		dx.gfx.drawfilledbox %iLinkUnderlineX %iLinkUnderlineY 245 1 %iLinkColorRed %iLinkColorGreen %iLinkColorBlue 255;
 	};
 
     dx.gfx.drawend;
@@ -97,6 +161,8 @@ function DXWND_OnKeyInput void(vKey int, bDown bool, bCtrlHeld bool, bShiftHeld 
 
 function DXWND_OnMouseInput void(x int, y int, iMouseKey int, bDown bool, bCtrlHeld bool, bShiftHeld bool, bAltHeld bool)
 {
+	local bInLinkRange bool;
+
 	if (%iMouseKey, -eq, 0) {
 		set iMouseXPos <= %x;
 		set iMouseYPos <= %y;
@@ -104,6 +170,11 @@ function DXWND_OnMouseInput void(x int, y int, iMouseKey int, bDown bool, bCtrlH
 		if (%bDown, -eq, false) {
 			for (i, 0, %arrSoundScriptItems.length, -inc) {
 				call checkButtonClicked_%arrSoundScriptItems[%i]() => void;
+			};
+
+			call checkLinkRange() => bInLinkRange;
+			if (%bInLinkRange, -eq, true) {
+				sys "start https://%INFO_WEBSITE";
 			};
 		};
 	};

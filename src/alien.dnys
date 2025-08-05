@@ -1,11 +1,11 @@
 # AquaShell Half-Life Classic Soundboard 'Alien' sound manager script file
 
 const iBtnAlienPosX int <= 55;
-const iBtnAlienPosY int <= 230;
+const iBtnAlienPosY int <= 250;
 const iBtnAlienWidth int <= 190;
 const iBtnAlienHeight int <= 45;
 const iTxtAlienX int <= 111;
-const iTxtAlienY int <= 239;
+const iTxtAlienY int <= 259;
 const szLabelAlien string <= "ALIEN";
 
 global hSprAlien int;

@@ -1,11 +1,11 @@
 # AquaShell Half-Life Classic Soundboard 'Warning' sound manager script file
 
 const iBtnWarningPosX int <= 350;
-const iBtnWarningPosY int <= 502;
+const iBtnWarningPosY int <= 522;
 const iBtnWarningWidth int <= 190;
 const iBtnWarningHeight int <= 45;
 const iTxtWarningX int <= 389;
-const iTxtWarningY int <= 512;
+const iTxtWarningY int <= 532;
 const szLabelWarning string <= "WARNING";
 
 global hSprWarning int;
