@@ -1,0 +1,92 @@
+# AquaShell Half-Life Classic Soundboard 'Greetings' sound manager script file
+
+const iBtnGreetingsPosX int <= 55;
+const iBtnGreetingsPosY int <= 230;
+const iBtnGreetingsWidth int <= 190;
+const iBtnGreetingsHeight int <= 45;
+const iTxtGreetingsX int <= 80;
+const iTxtGreetingsY int <= 239;
+const szLabelGreetings string <= "GREETINGS";
+
+global hSprGreetings int;
+global hSndGreetings int;
+
+function SoundPlayGreetings void()
+{
+	dx.snd.play %hSndGreetings %GLOBAL_VOLUME;
+};
+
+function checkButtonGreetingsHovered bool(btnx int, btny int, btnw int, btnh int)
+{
+	result false;
+	
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %btnx;
+	set chkbtnheight <= %btny;
+
+	+= chkbtnwidth %btnw;
+	+= chkbtnheight %btnh;
+
+	if (%iMouseXPos, -gr, %btnx) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %btny) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					result true;
+				};
+			};
+		};
+	};
+};
+
+function checkButtonGreetingsClicked void(btnx int, btny int, btnw int, btnh int, callback string)
+{
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %btnx;
+	set chkbtnheight <= %btny;
+
+	+= chkbtnwidth %btnw;
+	+= chkbtnheight %btnh;
+
+	if (%iMouseXPos, -gr, %btnx) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %btny) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					call %callback() => void;
+				};
+			};
+		};
+	};
+};
+
+function drawButtonGreetings void()
+{
+	local iTxtColorRed int;
+	local iTxtColorGreen int;
+	local iTxtColorBlue int;
+	local bButtonHovered bool;
+	
+	set iTxtColorRed <= 230;
+	set iTxtColorGreen <= 230;
+	set iTxtColorBlue <= 230;
+	
+	dx.gfx.drawsprite %hSprGreetings %iBtnGreetingsPosX %iBtnGreetingsPosY 0 0.0 0.0 false 0 0 0 0;
+	
+	call checkButtonGreetingsHovered(%iBtnGreetingsPosX, %iBtnGreetingsPosY, %iBtnGreetingsWidth, %iBtnGreetingsHeight) => bButtonHovered;
+	if (%bButtonHovered, -eq, true) {
+		set iTxtColorRed <= 255;
+		set iTxtColorGreen <= 255;
+		set iTxtColorBlue <= 255;
+	};
+	
+	dx.gfx.drawstring %hDefFont "%szLabelGreetings" %iTxtGreetingsX %iTxtGreetingsY %iTxtColorRed %iTxtColorGreen %iTxtColorBlue 255;
+};
+
+function loadAssetsGreetings void()
+{
+    dx.gfx.loadsprite "%szSpritePath/button.png" 1 %iBtnGreetingsWidth %iBtnGreetingsHeight 1 false hSprGreetings;
+    dx.snd.query "%szSoundPath/greetings.wav" hSndGreetings;
+};

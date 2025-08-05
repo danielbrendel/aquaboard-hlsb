@@ -1,0 +1,92 @@
+# AquaShell Half-Life Classic Soundboard 'Freeman' sound manager script file
+
+const iBtnFreemanPosX int <= 350;
+const iBtnFreemanPosY int <= 230;
+const iBtnFreemanWidth int <= 190;
+const iBtnFreemanHeight int <= 45;
+const iTxtFreemanX int <= 390;
+const iTxtFreemanY int <= 239;
+const szLabelFreeman string <= "FREEMAN";
+
+global hSprFreeman int;
+global hSndFreeman int;
+
+function SoundPlayFreeman void()
+{
+	dx.snd.play %hSndFreeman %GLOBAL_VOLUME;
+};
+
+function checkButtonFreemanHovered bool(btnx int, btny int, btnw int, btnh int)
+{
+	result false;
+	
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %btnx;
+	set chkbtnheight <= %btny;
+
+	+= chkbtnwidth %btnw;
+	+= chkbtnheight %btnh;
+
+	if (%iMouseXPos, -gr, %btnx) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %btny) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					result true;
+				};
+			};
+		};
+	};
+};
+
+function checkButtonFreemanClicked void(btnx int, btny int, btnw int, btnh int, callback string)
+{
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %btnx;
+	set chkbtnheight <= %btny;
+
+	+= chkbtnwidth %btnw;
+	+= chkbtnheight %btnh;
+
+	if (%iMouseXPos, -gr, %btnx) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %btny) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					call %callback() => void;
+				};
+			};
+		};
+	};
+};
+
+function drawButtonFreeman void()
+{
+	local iTxtColorRed int;
+	local iTxtColorGreen int;
+	local iTxtColorBlue int;
+	local bButtonHovered bool;
+	
+	set iTxtColorRed <= 230;
+	set iTxtColorGreen <= 230;
+	set iTxtColorBlue <= 230;
+	
+	dx.gfx.drawsprite %hSprFreeman %iBtnFreemanPosX %iBtnFreemanPosY 0 0.0 0.0 false 0 0 0 0;
+	
+	call checkButtonFreemanHovered(%iBtnFreemanPosX, %iBtnFreemanPosY, %iBtnFreemanWidth, %iBtnFreemanHeight) => bButtonHovered;
+	if (%bButtonHovered, -eq, true) {
+		set iTxtColorRed <= 255;
+		set iTxtColorGreen <= 255;
+		set iTxtColorBlue <= 255;
+	};
+	
+	dx.gfx.drawstring %hDefFont "%szLabelFreeman" %iTxtFreemanX %iTxtFreemanY %iTxtColorRed %iTxtColorGreen %iTxtColorBlue 255;
+};
+
+function loadAssetsFreeman void()
+{
+    dx.gfx.loadsprite "%szSpritePath/button.png" 1 %iBtnFreemanWidth %iBtnFreemanHeight 1 false hSprFreeman;
+    dx.snd.query "%szSoundPath/freeman.wav" hSndFreeman;
+};

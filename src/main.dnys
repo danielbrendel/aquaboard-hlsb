@@ -1,0 +1,119 @@
+# AquaShell Half-Life Classic Soundboard main script file
+
+require "array";
+require "auto";
+require "dx.window";
+require "dx.graphics";
+require "dx.sound";
+require "strings";
+
+#hideconsole;
+
+const WND_RES_X int <= 600;
+const WND_RES_Y int <= 800;
+const INVALID_DX_HANDLE int <= -1;
+const GLOBAL_VOLUME int <= 10;
+
+global szScriptPath string;
+global szSpritePath string;
+global szSoundPath string;
+global bDxValid bool;
+global hDefFont int;
+global hOverlay int;
+global hBanner int;
+global iMouseXPos int;
+global iMouseYPos int;
+
+getscriptpath szScriptPath;
+
+set szSpritePath <= {%szScriptPath..\assets\sprites};
+set szSoundPath <= {%szScriptPath..\assets\sounds};
+
+exec "%szScriptPath/greetings.dnys";
+exec "%szScriptPath/freeman.dnys";
+
+function DXWND_OnCreate void(hWnd int)
+{
+    local bGfxInit bool;
+
+    print "Window handle: %hWnd";
+
+    dx.gfx.initialize %hWnd %WND_WINDOWED %WND_RES_X %WND_RES_Y 0 0 0 0 bGfxInit;
+    dx.snd.initialize %hWnd;
+
+    dx.gfx.loadfont "Verdana" 12 25 hDefFont;
+    if (%hDefFont, -eq, %INVALID_DX_HANDLE) {
+        print "Failed to load font!";
+    };
+	
+	dx.gfx.setbgimage "%szSpritePath/background.png";
+	
+	dx.gfx.loadsprite "%szSpritePath/overlay.png" 1 %WND_RES_X %WND_RES_Y 1 false hOverlay;
+	dx.gfx.loadsprite "%szSpritePath/banner.png" 1 600 162 1 false hBanner;
+
+	call loadAssetsGreetings() => void;
+	call loadAssetsFreeman() => void;
+
+    print "DX.Graphics and DX.Sound initialized";
+};
+
+function DXWND_OnDraw void()
+{
+	local iBarXPos int;
+	local iCenterXPos int;
+	local iCenterYPos int;
+	local iLabelHoverColor int;
+	
+    dx.gfx.drawbegin;
+
+	dx.gfx.drawsprite %hOverlay 1 1 0 0.0 0.0 true 0 0 0 150;
+	dx.gfx.drawsprite %hBanner 1 30 0 0.0 0.0 false 0 0 0 0;
+	
+	call drawButtonGreetings() => void;
+	call drawButtonFreeman() => void;
+
+    dx.gfx.drawend;
+};
+
+function DXWND_OnKeyInput void(vKey int, bDown bool, bCtrlHeld bool, bShiftHeld bool, bAltHeld bool)
+{
+};
+
+function DXWND_OnMouseInput void(x int, y int, iMouseKey int, bDown bool, bCtrlHeld bool, bShiftHeld bool, bAltHeld bool)
+{
+	if (%iMouseKey, -eq, 0) {
+		set iMouseXPos <= %x;
+		set iMouseYPos <= %y;
+	} elseif (%iMouseKey, -eq, 1) {
+		if (%bDown, -eq, false) {
+			call checkButtonGreetingsClicked(%iBtnGreetingsPosX, %iBtnGreetingsPosY, %iBtnGreetingsWidth, %iBtnGreetingsHeight, "SoundPlayGreetings") => void;
+			call checkButtonFreemanClicked(%iBtnFreemanPosX, %iBtnFreemanPosY, %iBtnFreemanWidth, %iBtnFreemanHeight, "SoundPlayFreeman") => void;
+		};
+	};
+};
+
+function DXWND_OnDestroy void()
+{
+    print "Window destroyed";
+
+    dx.gfx.release;
+    dx.snd.release;
+};
+
+dx.wnd.set_event "OnCreate" DXWND_OnCreate;
+dx.wnd.set_event "OnDraw" DXWND_OnDraw;
+dx.wnd.set_event "OnKeyInput" DXWND_OnKeyInput;
+dx.wnd.set_event "OnMouseInput" DXWND_OnMouseInput;
+dx.wnd.set_event "OnDestroy" DXWND_OnDestroy;
+
+dx.wnd.initialize "AquaBoard: Half-Life Classic Soundboard" %WND_RES_X %WND_RES_Y;
+
+dx.wnd.is_valid bDxValid;
+
+while (%bDxValid, -eq, true) {
+	aut_calctimers;
+    dx.wnd.process;
+    dx.wnd.is_valid bDxValid;
+};
+
+dx.wnd.release;
