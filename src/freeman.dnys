@@ -1,37 +1,32 @@
 # AquaShell Half-Life Classic Soundboard 'Freeman' sound manager script file
 
 const iBtnFreemanPosX int <= 350;
-const iBtnFreemanPosY int <= 230;
+const iBtnFreemanPosY int <= 369;
 const iBtnFreemanWidth int <= 190;
 const iBtnFreemanHeight int <= 45;
 const iTxtFreemanX int <= 390;
-const iTxtFreemanY int <= 239;
+const iTxtFreemanY int <= 379;
 const szLabelFreeman string <= "FREEMAN";
 
 global hSprFreeman int;
 global hSndFreeman int;
 
-function SoundPlayFreeman void()
-{
-	dx.snd.play %hSndFreeman %GLOBAL_VOLUME;
-};
-
-function checkButtonFreemanHovered bool(btnx int, btny int, btnw int, btnh int)
+function checkButtonHovered_freeman bool()
 {
 	result false;
 	
 	local chkbtnwidth int;
 	local chkbtnheight int;
 	
-	set chkbtnwidth <= %btnx;
-	set chkbtnheight <= %btny;
+	set chkbtnwidth <= %iBtnFreemanPosX;
+	set chkbtnheight <= %iBtnFreemanPosY;
 
-	+= chkbtnwidth %btnw;
-	+= chkbtnheight %btnh;
+	+= chkbtnwidth %iBtnFreemanWidth;
+	+= chkbtnheight %iBtnFreemanHeight;
 
-	if (%iMouseXPos, -gr, %btnx) {
+	if (%iMouseXPos, -gr, %iBtnFreemanPosX) {
 		if (%iMouseXPos, -ls, %chkbtnwidth) {
-			if (%iMouseYPos, -gr, %btny) {
+			if (%iMouseYPos, -gr, %iBtnFreemanPosY) {
 				if (%iMouseYPos, -ls, %chkbtnheight) {
 					result true;
 				};
@@ -40,29 +35,29 @@ function checkButtonFreemanHovered bool(btnx int, btny int, btnw int, btnh int)
 	};
 };
 
-function checkButtonFreemanClicked void(btnx int, btny int, btnw int, btnh int, callback string)
+function checkButtonClicked_freeman void()
 {
 	local chkbtnwidth int;
 	local chkbtnheight int;
 	
-	set chkbtnwidth <= %btnx;
-	set chkbtnheight <= %btny;
+	set chkbtnwidth <= %iBtnFreemanPosX;
+	set chkbtnheight <= %iBtnFreemanPosY;
 
-	+= chkbtnwidth %btnw;
-	+= chkbtnheight %btnh;
+	+= chkbtnwidth %iBtnFreemanWidth;
+	+= chkbtnheight %iBtnFreemanHeight;
 
-	if (%iMouseXPos, -gr, %btnx) {
+	if (%iMouseXPos, -gr, %iBtnFreemanPosX) {
 		if (%iMouseXPos, -ls, %chkbtnwidth) {
-			if (%iMouseYPos, -gr, %btny) {
+			if (%iMouseYPos, -gr, %iBtnFreemanPosY) {
 				if (%iMouseYPos, -ls, %chkbtnheight) {
-					call %callback() => void;
+					dx.snd.play %hSndFreeman %GLOBAL_VOLUME;
 				};
 			};
 		};
 	};
 };
 
-function drawButtonFreeman void()
+function drawButton_freeman void()
 {
 	local iTxtColorRed int;
 	local iTxtColorGreen int;
@@ -75,7 +70,7 @@ function drawButtonFreeman void()
 	
 	dx.gfx.drawsprite %hSprFreeman %iBtnFreemanPosX %iBtnFreemanPosY 0 0.0 0.0 false 0 0 0 0;
 	
-	call checkButtonFreemanHovered(%iBtnFreemanPosX, %iBtnFreemanPosY, %iBtnFreemanWidth, %iBtnFreemanHeight) => bButtonHovered;
+	call checkButtonHovered_freeman() => bButtonHovered;
 	if (%bButtonHovered, -eq, true) {
 		set iTxtColorRed <= 255;
 		set iTxtColorGreen <= 255;
@@ -85,7 +80,7 @@ function drawButtonFreeman void()
 	dx.gfx.drawstring %hDefFont "%szLabelFreeman" %iTxtFreemanX %iTxtFreemanY %iTxtColorRed %iTxtColorGreen %iTxtColorBlue 255;
 };
 
-function loadAssetsFreeman void()
+function loadAssets_freeman void()
 {
     dx.gfx.loadsprite "%szSpritePath/button.png" 1 %iBtnFreemanWidth %iBtnFreemanHeight 1 false hSprFreeman;
     dx.snd.query "%szSoundPath/freeman.wav" hSndFreeman;

@@ -1,0 +1,87 @@
+# AquaShell Half-Life Classic Soundboard 'Warning' sound manager script file
+
+const iBtnWarningPosX int <= 350;
+const iBtnWarningPosY int <= 502;
+const iBtnWarningWidth int <= 190;
+const iBtnWarningHeight int <= 45;
+const iTxtWarningX int <= 389;
+const iTxtWarningY int <= 512;
+const szLabelWarning string <= "WARNING";
+
+global hSprWarning int;
+global hSndWarning int;
+
+function checkButtonHovered_warning bool()
+{
+	result false;
+	
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnWarningPosX;
+	set chkbtnheight <= %iBtnWarningPosY;
+
+	+= chkbtnwidth %iBtnWarningWidth;
+	+= chkbtnheight %iBtnWarningHeight;
+
+	if (%iMouseXPos, -gr, %iBtnWarningPosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnWarningPosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					result true;
+				};
+			};
+		};
+	};
+};
+
+function checkButtonClicked_warning void()
+{
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnWarningPosX;
+	set chkbtnheight <= %iBtnWarningPosY;
+
+	+= chkbtnwidth %iBtnWarningWidth;
+	+= chkbtnheight %iBtnWarningHeight;
+
+	if (%iMouseXPos, -gr, %iBtnWarningPosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnWarningPosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					dx.snd.play %hSndWarning %GLOBAL_VOLUME;
+				};
+			};
+		};
+	};
+};
+
+function drawButton_warning void()
+{
+	local iTxtColorRed int;
+	local iTxtColorGreen int;
+	local iTxtColorBlue int;
+	local bButtonHovered bool;
+	
+	set iTxtColorRed <= 230;
+	set iTxtColorGreen <= 230;
+	set iTxtColorBlue <= 230;
+	
+	dx.gfx.drawsprite %hSprWarning %iBtnWarningPosX %iBtnWarningPosY 0 0.0 0.0 false 0 0 0 0;
+	
+	call checkButtonHovered_warning() => bButtonHovered;
+	if (%bButtonHovered, -eq, true) {
+		set iTxtColorRed <= 255;
+		set iTxtColorGreen <= 255;
+		set iTxtColorBlue <= 255;
+	};
+	
+	dx.gfx.drawstring %hDefFont "%szLabelWarning" %iTxtWarningX %iTxtWarningY %iTxtColorRed %iTxtColorGreen %iTxtColorBlue 255;
+};
+
+function loadAssets_warning void()
+{
+    dx.gfx.loadsprite "%szSpritePath/button.png" 1 %iBtnWarningWidth %iBtnWarningHeight 1 false hSprWarning;
+    dx.snd.query "%szSoundPath/warning.wav" hSndWarning;
+};

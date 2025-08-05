@@ -1,0 +1,87 @@
+# AquaShell Half-Life Classic Soundboard 'Barnacle' sound manager script file
+
+const iBtnBarnaclePosX int <= 350;
+const iBtnBarnaclePosY int <= 230;
+const iBtnBarnacleWidth int <= 190;
+const iBtnBarnacleHeight int <= 45;
+const iTxtBarnacleX int <= 390;
+const iTxtBarnacleY int <= 239;
+const szLabelBarnacle string <= "BARNACLE";
+
+global hSprBarnacle int;
+global hSndBarnacle int;
+
+function checkButtonHovered_barnacle bool()
+{
+	result false;
+	
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnBarnaclePosX;
+	set chkbtnheight <= %iBtnBarnaclePosY;
+
+	+= chkbtnwidth %iBtnBarnacleWidth;
+	+= chkbtnheight %iBtnBarnacleHeight;
+
+	if (%iMouseXPos, -gr, %iBtnBarnaclePosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnBarnaclePosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					result true;
+				};
+			};
+		};
+	};
+};
+
+function checkButtonClicked_barnacle void()
+{
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnBarnaclePosX;
+	set chkbtnheight <= %iBtnBarnaclePosY;
+
+	+= chkbtnwidth %iBtnBarnacleWidth;
+	+= chkbtnheight %iBtnBarnacleHeight;
+
+	if (%iMouseXPos, -gr, %iBtnBarnaclePosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnBarnaclePosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					dx.snd.play %hSndBarnacle %GLOBAL_VOLUME;
+				};
+			};
+		};
+	};
+};
+
+function drawButton_barnacle void()
+{
+	local iTxtColorRed int;
+	local iTxtColorGreen int;
+	local iTxtColorBlue int;
+	local bButtonHovered bool;
+	
+	set iTxtColorRed <= 230;
+	set iTxtColorGreen <= 230;
+	set iTxtColorBlue <= 230;
+	
+	dx.gfx.drawsprite %hSprBarnacle %iBtnBarnaclePosX %iBtnBarnaclePosY 0 0.0 0.0 false 0 0 0 0;
+	
+	call checkButtonHovered_barnacle() => bButtonHovered;
+	if (%bButtonHovered, -eq, true) {
+		set iTxtColorRed <= 255;
+		set iTxtColorGreen <= 255;
+		set iTxtColorBlue <= 255;
+	};
+	
+	dx.gfx.drawstring %hDefFont "%szLabelBarnacle" %iTxtBarnacleX %iTxtBarnacleY %iTxtColorRed %iTxtColorGreen %iTxtColorBlue 255;
+};
+
+function loadAssets_barnacle void()
+{
+    dx.gfx.loadsprite "%szSpritePath/button.png" 1 %iBtnBarnacleWidth %iBtnBarnacleHeight 1 false hSprBarnacle;
+    dx.snd.query "%szSoundPath/barnacle.wav" hSndBarnacle;
+};

@@ -1,0 +1,87 @@
+# AquaShell Half-Life Classic Soundboard 'Choose' sound manager script file
+
+const iBtnChoosePosX int <= 55;
+const iBtnChoosePosY int <= 300;
+const iBtnChooseWidth int <= 190;
+const iBtnChooseHeight int <= 45;
+const iTxtChooseX int <= 102;
+const iTxtChooseY int <= 309;
+const szLabelChoose string <= "CHOOSE";
+
+global hSprChoose int;
+global hSndChoose int;
+
+function checkButtonHovered_choose bool(btnx int, btny int, btnw int, btnh int)
+{
+	result false;
+	
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnChoosePosX;
+	set chkbtnheight <= %iBtnChoosePosY;
+
+	+= chkbtnwidth %iBtnChooseWidth;
+	+= chkbtnheight %iBtnChooseHeight;
+
+	if (%iMouseXPos, -gr, %iBtnChoosePosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnChoosePosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					result true;
+				};
+			};
+		};
+	};
+};
+
+function checkButtonClicked_choose void(btnx int, btny int, btnw int, btnh int, callback string)
+{
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnChoosePosX;
+	set chkbtnheight <= %iBtnChoosePosY;
+
+	+= chkbtnwidth %iBtnChooseWidth;
+	+= chkbtnheight %iBtnChooseHeight;
+
+	if (%iMouseXPos, -gr, %iBtnChoosePosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnChoosePosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					dx.snd.play %hSndChoose %GLOBAL_VOLUME;
+				};
+			};
+		};
+	};
+};
+
+function drawButton_choose void()
+{
+	local iTxtColorRed int;
+	local iTxtColorGreen int;
+	local iTxtColorBlue int;
+	local bButtonHovered bool;
+	
+	set iTxtColorRed <= 230;
+	set iTxtColorGreen <= 230;
+	set iTxtColorBlue <= 230;
+	
+	dx.gfx.drawsprite %hSprChoose %iBtnChoosePosX %iBtnChoosePosY 0 0.0 0.0 false 0 0 0 0;
+	
+	call checkButtonHovered_choose(%iBtnChoosePosX, %iBtnChoosePosY, %iBtnChooseWidth, %iBtnChooseHeight) => bButtonHovered;
+	if (%bButtonHovered, -eq, true) {
+		set iTxtColorRed <= 255;
+		set iTxtColorGreen <= 255;
+		set iTxtColorBlue <= 255;
+	};
+	
+	dx.gfx.drawstring %hDefFont "%szLabelChoose" %iTxtChooseX %iTxtChooseY %iTxtColorRed %iTxtColorGreen %iTxtColorBlue 255;
+};
+
+function loadAssets_choose void()
+{
+    dx.gfx.loadsprite "%szSpritePath/button.png" 1 %iBtnChooseWidth %iBtnChooseHeight 1 false hSprChoose;
+    dx.snd.query "%szSoundPath/choose.wav" hSndChoose;
+};

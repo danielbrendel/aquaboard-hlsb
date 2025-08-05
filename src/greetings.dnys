@@ -1,37 +1,32 @@
 # AquaShell Half-Life Classic Soundboard 'Greetings' sound manager script file
 
 const iBtnGreetingsPosX int <= 55;
-const iBtnGreetingsPosY int <= 230;
+const iBtnGreetingsPosY int <= 436;
 const iBtnGreetingsWidth int <= 190;
 const iBtnGreetingsHeight int <= 45;
-const iTxtGreetingsX int <= 80;
-const iTxtGreetingsY int <= 239;
+const iTxtGreetingsX int <= 83;
+const iTxtGreetingsY int <= 447;
 const szLabelGreetings string <= "GREETINGS";
 
 global hSprGreetings int;
 global hSndGreetings int;
 
-function SoundPlayGreetings void()
-{
-	dx.snd.play %hSndGreetings %GLOBAL_VOLUME;
-};
-
-function checkButtonGreetingsHovered bool(btnx int, btny int, btnw int, btnh int)
+function checkButtonHovered_greetings bool(btnx int, btny int, btnw int, btnh int)
 {
 	result false;
 	
 	local chkbtnwidth int;
 	local chkbtnheight int;
 	
-	set chkbtnwidth <= %btnx;
-	set chkbtnheight <= %btny;
+	set chkbtnwidth <= %iBtnGreetingsPosX;
+	set chkbtnheight <= %iBtnGreetingsPosY;
 
-	+= chkbtnwidth %btnw;
-	+= chkbtnheight %btnh;
+	+= chkbtnwidth %iBtnGreetingsWidth;
+	+= chkbtnheight %iBtnGreetingsHeight;
 
-	if (%iMouseXPos, -gr, %btnx) {
+	if (%iMouseXPos, -gr, %iBtnGreetingsPosX) {
 		if (%iMouseXPos, -ls, %chkbtnwidth) {
-			if (%iMouseYPos, -gr, %btny) {
+			if (%iMouseYPos, -gr, %iBtnGreetingsPosY) {
 				if (%iMouseYPos, -ls, %chkbtnheight) {
 					result true;
 				};
@@ -40,29 +35,29 @@ function checkButtonGreetingsHovered bool(btnx int, btny int, btnw int, btnh int
 	};
 };
 
-function checkButtonGreetingsClicked void(btnx int, btny int, btnw int, btnh int, callback string)
+function checkButtonClicked_greetings void(btnx int, btny int, btnw int, btnh int, callback string)
 {
 	local chkbtnwidth int;
 	local chkbtnheight int;
 	
-	set chkbtnwidth <= %btnx;
-	set chkbtnheight <= %btny;
+	set chkbtnwidth <= %iBtnGreetingsPosX;
+	set chkbtnheight <= %iBtnGreetingsPosY;
 
-	+= chkbtnwidth %btnw;
-	+= chkbtnheight %btnh;
+	+= chkbtnwidth %iBtnGreetingsWidth;
+	+= chkbtnheight %iBtnGreetingsHeight;
 
-	if (%iMouseXPos, -gr, %btnx) {
+	if (%iMouseXPos, -gr, %iBtnGreetingsPosX) {
 		if (%iMouseXPos, -ls, %chkbtnwidth) {
-			if (%iMouseYPos, -gr, %btny) {
+			if (%iMouseYPos, -gr, %iBtnGreetingsPosY) {
 				if (%iMouseYPos, -ls, %chkbtnheight) {
-					call %callback() => void;
+					dx.snd.play %hSndGreetings %GLOBAL_VOLUME;
 				};
 			};
 		};
 	};
 };
 
-function drawButtonGreetings void()
+function drawButton_greetings void()
 {
 	local iTxtColorRed int;
 	local iTxtColorGreen int;
@@ -75,7 +70,7 @@ function drawButtonGreetings void()
 	
 	dx.gfx.drawsprite %hSprGreetings %iBtnGreetingsPosX %iBtnGreetingsPosY 0 0.0 0.0 false 0 0 0 0;
 	
-	call checkButtonGreetingsHovered(%iBtnGreetingsPosX, %iBtnGreetingsPosY, %iBtnGreetingsWidth, %iBtnGreetingsHeight) => bButtonHovered;
+	call checkButtonHovered_greetings(%iBtnGreetingsPosX, %iBtnGreetingsPosY, %iBtnGreetingsWidth, %iBtnGreetingsHeight) => bButtonHovered;
 	if (%bButtonHovered, -eq, true) {
 		set iTxtColorRed <= 255;
 		set iTxtColorGreen <= 255;
@@ -85,7 +80,7 @@ function drawButtonGreetings void()
 	dx.gfx.drawstring %hDefFont "%szLabelGreetings" %iTxtGreetingsX %iTxtGreetingsY %iTxtColorRed %iTxtColorGreen %iTxtColorBlue 255;
 };
 
-function loadAssetsGreetings void()
+function loadAssets_greetings void()
 {
     dx.gfx.loadsprite "%szSpritePath/button.png" 1 %iBtnGreetingsWidth %iBtnGreetingsHeight 1 false hSprGreetings;
     dx.snd.query "%szSoundPath/greetings.wav" hSndGreetings;

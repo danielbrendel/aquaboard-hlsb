@@ -1,0 +1,87 @@
+# AquaShell Half-Life Classic Soundboard 'Headcrab' sound manager script file
+
+const iBtnHeadcrabPosX int <= 350;
+const iBtnHeadcrabPosY int <= 436;
+const iBtnHeadcrabWidth int <= 190;
+const iBtnHeadcrabHeight int <= 45;
+const iTxtHeadcrabX int <= 384;
+const iTxtHeadcrabY int <= 447;
+const szLabelHeadcrab string <= "HEADCRAB";
+
+global hSprHeadcrab int;
+global hSndHeadcrab int;
+
+function checkButtonHovered_headcrab bool()
+{
+	result false;
+	
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnHeadcrabPosX;
+	set chkbtnheight <= %iBtnHeadcrabPosY;
+
+	+= chkbtnwidth %iBtnHeadcrabWidth;
+	+= chkbtnheight %iBtnHeadcrabHeight;
+
+	if (%iMouseXPos, -gr, %iBtnHeadcrabPosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnHeadcrabPosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					result true;
+				};
+			};
+		};
+	};
+};
+
+function checkButtonClicked_headcrab void()
+{
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnHeadcrabPosX;
+	set chkbtnheight <= %iBtnHeadcrabPosY;
+
+	+= chkbtnwidth %iBtnHeadcrabWidth;
+	+= chkbtnheight %iBtnHeadcrabHeight;
+
+	if (%iMouseXPos, -gr, %iBtnHeadcrabPosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnHeadcrabPosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					dx.snd.play %hSndHeadcrab %GLOBAL_VOLUME;
+				};
+			};
+		};
+	};
+};
+
+function drawButton_headcrab void()
+{
+	local iTxtColorRed int;
+	local iTxtColorGreen int;
+	local iTxtColorBlue int;
+	local bButtonHovered bool;
+	
+	set iTxtColorRed <= 230;
+	set iTxtColorGreen <= 230;
+	set iTxtColorBlue <= 230;
+	
+	dx.gfx.drawsprite %hSprHeadcrab %iBtnHeadcrabPosX %iBtnHeadcrabPosY 0 0.0 0.0 false 0 0 0 0;
+	
+	call checkButtonHovered_headcrab() => bButtonHovered;
+	if (%bButtonHovered, -eq, true) {
+		set iTxtColorRed <= 255;
+		set iTxtColorGreen <= 255;
+		set iTxtColorBlue <= 255;
+	};
+	
+	dx.gfx.drawstring %hDefFont "%szLabelHeadcrab" %iTxtHeadcrabX %iTxtHeadcrabY %iTxtColorRed %iTxtColorGreen %iTxtColorBlue 255;
+};
+
+function loadAssets_headcrab void()
+{
+    dx.gfx.loadsprite "%szSpritePath/button.png" 1 %iBtnHeadcrabWidth %iBtnHeadcrabHeight 1 false hSprHeadcrab;
+    dx.snd.query "%szSoundPath/headcrab.wav" hSndHeadcrab;
+};

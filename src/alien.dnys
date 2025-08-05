@@ -1,0 +1,87 @@
+# AquaShell Half-Life Classic Soundboard 'Alien' sound manager script file
+
+const iBtnAlienPosX int <= 55;
+const iBtnAlienPosY int <= 230;
+const iBtnAlienWidth int <= 190;
+const iBtnAlienHeight int <= 45;
+const iTxtAlienX int <= 111;
+const iTxtAlienY int <= 239;
+const szLabelAlien string <= "ALIEN";
+
+global hSprAlien int;
+global hSndAlien int;
+
+function checkButtonHovered_alien bool(btnx int, btny int, btnw int, btnh int)
+{
+	result false;
+	
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnAlienPosX;
+	set chkbtnheight <= %iBtnAlienPosY;
+
+	+= chkbtnwidth %iBtnAlienWidth;
+	+= chkbtnheight %iBtnAlienHeight;
+
+	if (%iMouseXPos, -gr, %iBtnAlienPosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnAlienPosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					result true;
+				};
+			};
+		};
+	};
+};
+
+function checkButtonClicked_alien void(btnx int, btny int, btnw int, btnh int, callback string)
+{
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnAlienPosX;
+	set chkbtnheight <= %iBtnAlienPosY;
+
+	+= chkbtnwidth %iBtnAlienWidth;
+	+= chkbtnheight %iBtnAlienHeight;
+
+	if (%iMouseXPos, -gr, %iBtnAlienPosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnAlienPosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					dx.snd.play %hSndAlien %GLOBAL_VOLUME;
+				};
+			};
+		};
+	};
+};
+
+function drawButton_alien void()
+{
+	local iTxtColorRed int;
+	local iTxtColorGreen int;
+	local iTxtColorBlue int;
+	local bButtonHovered bool;
+	
+	set iTxtColorRed <= 230;
+	set iTxtColorGreen <= 230;
+	set iTxtColorBlue <= 230;
+	
+	dx.gfx.drawsprite %hSprAlien %iBtnAlienPosX %iBtnAlienPosY 0 0.0 0.0 false 0 0 0 0;
+	
+	call checkButtonHovered_alien(%iBtnAlienPosX, %iBtnAlienPosY, %iBtnAlienWidth, %iBtnAlienHeight) => bButtonHovered;
+	if (%bButtonHovered, -eq, true) {
+		set iTxtColorRed <= 255;
+		set iTxtColorGreen <= 255;
+		set iTxtColorBlue <= 255;
+	};
+	
+	dx.gfx.drawstring %hDefFont "%szLabelAlien" %iTxtAlienX %iTxtAlienY %iTxtColorRed %iTxtColorGreen %iTxtColorBlue 255;
+};
+
+function loadAssets_alien void()
+{
+    dx.gfx.loadsprite "%szSpritePath/button.png" 1 %iBtnAlienWidth %iBtnAlienHeight 1 false hSprAlien;
+    dx.snd.query "%szSoundPath/alien.wav" hSndAlien;
+};

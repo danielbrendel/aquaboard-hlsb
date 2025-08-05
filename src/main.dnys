@@ -24,13 +24,27 @@ global hBanner int;
 global iMouseXPos int;
 global iMouseYPos int;
 
+array arrSoundScriptItems string 10 (
+	"alien",
+	"barnacle",
+	"choose",
+	"computalk",
+	"duty",
+	"freeman",
+	"greetings",
+	"headcrab",
+	"horror",
+	"warning"
+);
+
 getscriptpath szScriptPath;
 
 set szSpritePath <= {%szScriptPath..\assets\sprites};
 set szSoundPath <= {%szScriptPath..\assets\sounds};
 
-exec "%szScriptPath/greetings.dnys";
-exec "%szScriptPath/freeman.dnys";
+for (i, 0, %arrSoundScriptItems.length, -inc) {
+	exec "%szScriptPath/%arrSoundScriptItems[%i].dnys";
+};
 
 function DXWND_OnCreate void(hWnd int)
 {
@@ -51,8 +65,9 @@ function DXWND_OnCreate void(hWnd int)
 	dx.gfx.loadsprite "%szSpritePath/overlay.png" 1 %WND_RES_X %WND_RES_Y 1 false hOverlay;
 	dx.gfx.loadsprite "%szSpritePath/banner.png" 1 600 162 1 false hBanner;
 
-	call loadAssetsGreetings() => void;
-	call loadAssetsFreeman() => void;
+	for (i, 0, %arrSoundScriptItems.length, -inc) {
+		call loadAssets_%arrSoundScriptItems[%i]() => void;
+	};
 
     print "DX.Graphics and DX.Sound initialized";
 };
@@ -69,8 +84,9 @@ function DXWND_OnDraw void()
 	dx.gfx.drawsprite %hOverlay 1 1 0 0.0 0.0 true 0 0 0 150;
 	dx.gfx.drawsprite %hBanner 1 30 0 0.0 0.0 false 0 0 0 0;
 	
-	call drawButtonGreetings() => void;
-	call drawButtonFreeman() => void;
+	for (i, 0, %arrSoundScriptItems.length, -inc) {
+		call drawButton_%arrSoundScriptItems[%i]() => void;
+	};
 
     dx.gfx.drawend;
 };
@@ -86,8 +102,9 @@ function DXWND_OnMouseInput void(x int, y int, iMouseKey int, bDown bool, bCtrlH
 		set iMouseYPos <= %y;
 	} elseif (%iMouseKey, -eq, 1) {
 		if (%bDown, -eq, false) {
-			call checkButtonGreetingsClicked(%iBtnGreetingsPosX, %iBtnGreetingsPosY, %iBtnGreetingsWidth, %iBtnGreetingsHeight, "SoundPlayGreetings") => void;
-			call checkButtonFreemanClicked(%iBtnFreemanPosX, %iBtnFreemanPosY, %iBtnFreemanWidth, %iBtnFreemanHeight, "SoundPlayFreeman") => void;
+			for (i, 0, %arrSoundScriptItems.length, -inc) {
+				call checkButtonClicked_%arrSoundScriptItems[%i]() => void;
+			};
 		};
 	};
 };

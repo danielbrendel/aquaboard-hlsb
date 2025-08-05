@@ -1,0 +1,87 @@
+# AquaShell Half-Life Classic Soundboard 'Duty' sound manager script file
+
+const iBtnDutyPosX int <= 55;
+const iBtnDutyPosY int <= 369;
+const iBtnDutyWidth int <= 190;
+const iBtnDutyHeight int <= 45;
+const iTxtDutyX int <= 115;
+const iTxtDutyY int <= 379;
+const szLabelDuty string <= "DUTY";
+
+global hSprDuty int;
+global hSndDuty int;
+
+function checkButtonHovered_duty bool(btnx int, btny int, btnw int, btnh int)
+{
+	result false;
+	
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnDutyPosX;
+	set chkbtnheight <= %iBtnDutyPosY;
+
+	+= chkbtnwidth %iBtnDutyWidth;
+	+= chkbtnheight %iBtnDutyHeight;
+
+	if (%iMouseXPos, -gr, %iBtnDutyPosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnDutyPosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					result true;
+				};
+			};
+		};
+	};
+};
+
+function checkButtonClicked_duty void(btnx int, btny int, btnw int, btnh int, callback string)
+{
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnDutyPosX;
+	set chkbtnheight <= %iBtnDutyPosY;
+
+	+= chkbtnwidth %iBtnDutyWidth;
+	+= chkbtnheight %iBtnDutyHeight;
+
+	if (%iMouseXPos, -gr, %iBtnDutyPosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnDutyPosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					dx.snd.play %hSndDuty %GLOBAL_VOLUME;
+				};
+			};
+		};
+	};
+};
+
+function drawButton_duty void()
+{
+	local iTxtColorRed int;
+	local iTxtColorGreen int;
+	local iTxtColorBlue int;
+	local bButtonHovered bool;
+	
+	set iTxtColorRed <= 230;
+	set iTxtColorGreen <= 230;
+	set iTxtColorBlue <= 230;
+	
+	dx.gfx.drawsprite %hSprDuty %iBtnDutyPosX %iBtnDutyPosY 0 0.0 0.0 false 0 0 0 0;
+	
+	call checkButtonHovered_duty(%iBtnDutyPosX, %iBtnDutyPosY, %iBtnDutyWidth, %iBtnDutyHeight) => bButtonHovered;
+	if (%bButtonHovered, -eq, true) {
+		set iTxtColorRed <= 255;
+		set iTxtColorGreen <= 255;
+		set iTxtColorBlue <= 255;
+	};
+	
+	dx.gfx.drawstring %hDefFont "%szLabelDuty" %iTxtDutyX %iTxtDutyY %iTxtColorRed %iTxtColorGreen %iTxtColorBlue 255;
+};
+
+function loadAssets_duty void()
+{
+    dx.gfx.loadsprite "%szSpritePath/button.png" 1 %iBtnDutyWidth %iBtnDutyHeight 1 false hSprDuty;
+    dx.snd.query "%szSoundPath/duty.wav" hSndDuty;
+};
