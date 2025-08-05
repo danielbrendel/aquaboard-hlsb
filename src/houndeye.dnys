@@ -1,0 +1,87 @@
+# AquaShell Half-Life Classic Soundboard 'Houndeye' sound manager script file
+
+const iBtnHoundeyePosX int <= 55;
+const iBtnHoundeyePosY int <= 556;
+const iBtnHoundeyeWidth int <= 190;
+const iBtnHoundeyeHeight int <= 45;
+const iTxtHoundeyeX int <= 87;
+const iTxtHoundeyeY int <= 567;
+const szLabelHoundeye string <= "HOUNDEYE";
+
+global hSprHoundeye int;
+global hSndHoundeye int;
+
+function checkButtonHovered_houndeye bool(btnx int, btny int, btnw int, btnh int)
+{
+	result false;
+	
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnHoundeyePosX;
+	set chkbtnheight <= %iBtnHoundeyePosY;
+
+	+= chkbtnwidth %iBtnHoundeyeWidth;
+	+= chkbtnheight %iBtnHoundeyeHeight;
+
+	if (%iMouseXPos, -gr, %iBtnHoundeyePosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnHoundeyePosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					result true;
+				};
+			};
+		};
+	};
+};
+
+function checkButtonClicked_houndeye void(btnx int, btny int, btnw int, btnh int, callback string)
+{
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnHoundeyePosX;
+	set chkbtnheight <= %iBtnHoundeyePosY;
+
+	+= chkbtnwidth %iBtnHoundeyeWidth;
+	+= chkbtnheight %iBtnHoundeyeHeight;
+
+	if (%iMouseXPos, -gr, %iBtnHoundeyePosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnHoundeyePosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					dx.snd.play %hSndHoundeye %GLOBAL_VOLUME;
+				};
+			};
+		};
+	};
+};
+
+function drawButton_houndeye void()
+{
+	local iTxtColorRed int;
+	local iTxtColorGreen int;
+	local iTxtColorBlue int;
+	local bButtonHovered bool;
+	
+	set iTxtColorRed <= 230;
+	set iTxtColorGreen <= 230;
+	set iTxtColorBlue <= 230;
+	
+	dx.gfx.drawsprite %hSprHoundeye %iBtnHoundeyePosX %iBtnHoundeyePosY 0 0.0 0.0 false 0 0 0 0;
+	
+	call checkButtonHovered_houndeye(%iBtnHoundeyePosX, %iBtnHoundeyePosY, %iBtnHoundeyeWidth, %iBtnHoundeyeHeight) => bButtonHovered;
+	if (%bButtonHovered, -eq, true) {
+		set iTxtColorRed <= 255;
+		set iTxtColorGreen <= 255;
+		set iTxtColorBlue <= 255;
+	};
+	
+	dx.gfx.drawstring %hDefFont "%szLabelHoundeye" %iTxtHoundeyeX %iTxtHoundeyeY %iTxtColorRed %iTxtColorGreen %iTxtColorBlue 255;
+};
+
+function loadAssets_houndeye void()
+{
+    dx.gfx.loadsprite "%szSpritePath/button.png" 1 %iBtnHoundeyeWidth %iBtnHoundeyeHeight 1 false hSprHoundeye;
+    dx.snd.query "%szSoundPath/houndeye.wav" hSndHoundeye;
+};

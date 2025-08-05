@@ -1,0 +1,87 @@
+# AquaShell Half-Life Classic Soundboard 'Zombie' sound manager script file
+
+const iBtnZombiePosX int <= 350;
+const iBtnZombiePosY int <= 625;
+const iBtnZombieWidth int <= 190;
+const iBtnZombieHeight int <= 45;
+const iTxtZombieX int <= 399;
+const iTxtZombieY int <= 637;
+const szLabelZombie string <= "ZOMBIE";
+
+global hSprZombie int;
+global hSndZombie int;
+
+function checkButtonHovered_zombie bool(btnx int, btny int, btnw int, btnh int)
+{
+	result false;
+	
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnZombiePosX;
+	set chkbtnheight <= %iBtnZombiePosY;
+
+	+= chkbtnwidth %iBtnZombieWidth;
+	+= chkbtnheight %iBtnZombieHeight;
+
+	if (%iMouseXPos, -gr, %iBtnZombiePosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnZombiePosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					result true;
+				};
+			};
+		};
+	};
+};
+
+function checkButtonClicked_zombie void(btnx int, btny int, btnw int, btnh int, callback string)
+{
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnZombiePosX;
+	set chkbtnheight <= %iBtnZombiePosY;
+
+	+= chkbtnwidth %iBtnZombieWidth;
+	+= chkbtnheight %iBtnZombieHeight;
+
+	if (%iMouseXPos, -gr, %iBtnZombiePosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnZombiePosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					dx.snd.play %hSndZombie %GLOBAL_VOLUME;
+				};
+			};
+		};
+	};
+};
+
+function drawButton_zombie void()
+{
+	local iTxtColorRed int;
+	local iTxtColorGreen int;
+	local iTxtColorBlue int;
+	local bButtonHovered bool;
+	
+	set iTxtColorRed <= 230;
+	set iTxtColorGreen <= 230;
+	set iTxtColorBlue <= 230;
+	
+	dx.gfx.drawsprite %hSprZombie %iBtnZombiePosX %iBtnZombiePosY 0 0.0 0.0 false 0 0 0 0;
+	
+	call checkButtonHovered_zombie(%iBtnZombiePosX, %iBtnZombiePosY, %iBtnZombieWidth, %iBtnZombieHeight) => bButtonHovered;
+	if (%bButtonHovered, -eq, true) {
+		set iTxtColorRed <= 255;
+		set iTxtColorGreen <= 255;
+		set iTxtColorBlue <= 255;
+	};
+	
+	dx.gfx.drawstring %hDefFont "%szLabelZombie" %iTxtZombieX %iTxtZombieY %iTxtColorRed %iTxtColorGreen %iTxtColorBlue 255;
+};
+
+function loadAssets_zombie void()
+{
+    dx.gfx.loadsprite "%szSpritePath/button.png" 1 %iBtnZombieWidth %iBtnZombieHeight 1 false hSprZombie;
+    dx.snd.query "%szSoundPath/zombie.wav" hSndZombie;
+};

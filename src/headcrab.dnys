@@ -1,11 +1,11 @@
 # AquaShell Half-Life Classic Soundboard 'Headcrab' sound manager script file
 
-const iBtnHeadcrabPosX int <= 350;
-const iBtnHeadcrabPosY int <= 456;
+const iBtnHeadcrabPosX int <= 55;
+const iBtnHeadcrabPosY int <= 487;
 const iBtnHeadcrabWidth int <= 190;
 const iBtnHeadcrabHeight int <= 45;
-const iTxtHeadcrabX int <= 384;
-const iTxtHeadcrabY int <= 467;
+const iTxtHeadcrabX int <= 89;
+const iTxtHeadcrabY int <= 497;
 const szLabelHeadcrab string <= "HEADCRAB";
 
 global hSprHeadcrab int;

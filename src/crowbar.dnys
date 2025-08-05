@@ -1,0 +1,87 @@
+# AquaShell Half-Life Classic Soundboard 'Crowbar' sound manager script file
+
+const iBtnCrowbarPosX int <= 55;
+const iBtnCrowbarPosY int <= 354;
+const iBtnCrowbarWidth int <= 190;
+const iBtnCrowbarHeight int <= 45;
+const iTxtCrowbarX int <= 93;
+const iTxtCrowbarY int <= 364;
+const szLabelCrowbar string <= "CROWBAR";
+
+global hSprCrowbar int;
+global hSndCrowbar int;
+
+function checkButtonHovered_crowbar bool(btnx int, btny int, btnw int, btnh int)
+{
+	result false;
+	
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnCrowbarPosX;
+	set chkbtnheight <= %iBtnCrowbarPosY;
+
+	+= chkbtnwidth %iBtnCrowbarWidth;
+	+= chkbtnheight %iBtnCrowbarHeight;
+
+	if (%iMouseXPos, -gr, %iBtnCrowbarPosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnCrowbarPosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					result true;
+				};
+			};
+		};
+	};
+};
+
+function checkButtonClicked_crowbar void(btnx int, btny int, btnw int, btnh int, callback string)
+{
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnCrowbarPosX;
+	set chkbtnheight <= %iBtnCrowbarPosY;
+
+	+= chkbtnwidth %iBtnCrowbarWidth;
+	+= chkbtnheight %iBtnCrowbarHeight;
+
+	if (%iMouseXPos, -gr, %iBtnCrowbarPosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnCrowbarPosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					dx.snd.play %hSndCrowbar %GLOBAL_VOLUME;
+				};
+			};
+		};
+	};
+};
+
+function drawButton_crowbar void()
+{
+	local iTxtColorRed int;
+	local iTxtColorGreen int;
+	local iTxtColorBlue int;
+	local bButtonHovered bool;
+	
+	set iTxtColorRed <= 230;
+	set iTxtColorGreen <= 230;
+	set iTxtColorBlue <= 230;
+	
+	dx.gfx.drawsprite %hSprCrowbar %iBtnCrowbarPosX %iBtnCrowbarPosY 0 0.0 0.0 false 0 0 0 0;
+	
+	call checkButtonHovered_crowbar(%iBtnCrowbarPosX, %iBtnCrowbarPosY, %iBtnCrowbarWidth, %iBtnCrowbarHeight) => bButtonHovered;
+	if (%bButtonHovered, -eq, true) {
+		set iTxtColorRed <= 255;
+		set iTxtColorGreen <= 255;
+		set iTxtColorBlue <= 255;
+	};
+	
+	dx.gfx.drawstring %hDefFont "%szLabelCrowbar" %iTxtCrowbarX %iTxtCrowbarY %iTxtColorRed %iTxtColorGreen %iTxtColorBlue 255;
+};
+
+function loadAssets_crowbar void()
+{
+    dx.gfx.loadsprite "%szSpritePath/button.png" 1 %iBtnCrowbarWidth %iBtnCrowbarHeight 1 false hSprCrowbar;
+    dx.snd.query "%szSoundPath/crowbar.wav" hSndCrowbar;
+};

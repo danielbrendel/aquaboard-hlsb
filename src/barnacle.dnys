@@ -1,11 +1,11 @@
 # AquaShell Half-Life Classic Soundboard 'Barnacle' sound manager script file
 
 const iBtnBarnaclePosX int <= 350;
-const iBtnBarnaclePosY int <= 250;
+const iBtnBarnaclePosY int <= 215;
 const iBtnBarnacleWidth int <= 190;
 const iBtnBarnacleHeight int <= 45;
 const iTxtBarnacleX int <= 390;
-const iTxtBarnacleY int <= 259;
+const iTxtBarnacleY int <= 224;
 const szLabelBarnacle string <= "BARNACLE";
 
 global hSprBarnacle int;

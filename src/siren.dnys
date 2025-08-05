@@ -1,0 +1,87 @@
+# AquaShell Half-Life Classic Soundboard 'Siren' sound manager script file
+
+const iBtnSirenPosX int <= 350;
+const iBtnSirenPosY int <= 556;
+const iBtnSirenWidth int <= 190;
+const iBtnSirenHeight int <= 45;
+const iTxtSirenX int <= 407;
+const iTxtSirenY int <= 567;
+const szLabelSiren string <= "SIREN";
+
+global hSprSiren int;
+global hSndSiren int;
+
+function checkButtonHovered_siren bool(btnx int, btny int, btnw int, btnh int)
+{
+	result false;
+	
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnSirenPosX;
+	set chkbtnheight <= %iBtnSirenPosY;
+
+	+= chkbtnwidth %iBtnSirenWidth;
+	+= chkbtnheight %iBtnSirenHeight;
+
+	if (%iMouseXPos, -gr, %iBtnSirenPosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnSirenPosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					result true;
+				};
+			};
+		};
+	};
+};
+
+function checkButtonClicked_siren void(btnx int, btny int, btnw int, btnh int, callback string)
+{
+	local chkbtnwidth int;
+	local chkbtnheight int;
+	
+	set chkbtnwidth <= %iBtnSirenPosX;
+	set chkbtnheight <= %iBtnSirenPosY;
+
+	+= chkbtnwidth %iBtnSirenWidth;
+	+= chkbtnheight %iBtnSirenHeight;
+
+	if (%iMouseXPos, -gr, %iBtnSirenPosX) {
+		if (%iMouseXPos, -ls, %chkbtnwidth) {
+			if (%iMouseYPos, -gr, %iBtnSirenPosY) {
+				if (%iMouseYPos, -ls, %chkbtnheight) {
+					dx.snd.play %hSndSiren %GLOBAL_VOLUME;
+				};
+			};
+		};
+	};
+};
+
+function drawButton_siren void()
+{
+	local iTxtColorRed int;
+	local iTxtColorGreen int;
+	local iTxtColorBlue int;
+	local bButtonHovered bool;
+	
+	set iTxtColorRed <= 230;
+	set iTxtColorGreen <= 230;
+	set iTxtColorBlue <= 230;
+	
+	dx.gfx.drawsprite %hSprSiren %iBtnSirenPosX %iBtnSirenPosY 0 0.0 0.0 false 0 0 0 0;
+	
+	call checkButtonHovered_siren(%iBtnSirenPosX, %iBtnSirenPosY, %iBtnSirenWidth, %iBtnSirenHeight) => bButtonHovered;
+	if (%bButtonHovered, -eq, true) {
+		set iTxtColorRed <= 255;
+		set iTxtColorGreen <= 255;
+		set iTxtColorBlue <= 255;
+	};
+	
+	dx.gfx.drawstring %hDefFont "%szLabelSiren" %iTxtSirenX %iTxtSirenY %iTxtColorRed %iTxtColorGreen %iTxtColorBlue 255;
+};
+
+function loadAssets_siren void()
+{
+    dx.gfx.loadsprite "%szSpritePath/button.png" 1 %iBtnSirenWidth %iBtnSirenHeight 1 false hSprSiren;
+    dx.snd.query "%szSoundPath/siren.wav" hSndSiren;
+};

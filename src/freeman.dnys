@@ -1,11 +1,11 @@
 # AquaShell Half-Life Classic Soundboard 'Freeman' sound manager script file
 
-const iBtnFreemanPosX int <= 350;
-const iBtnFreemanPosY int <= 389;
+const iBtnFreemanPosX int <= 55;
+const iBtnFreemanPosY int <= 421;
 const iBtnFreemanWidth int <= 190;
 const iBtnFreemanHeight int <= 45;
-const iTxtFreemanX int <= 390;
-const iTxtFreemanY int <= 399;
+const iTxtFreemanX int <= 95;
+const iTxtFreemanY int <= 432;
 const szLabelFreeman string <= "FREEMAN";
 
 global hSprFreeman int;

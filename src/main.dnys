@@ -13,6 +13,7 @@ const WND_RES_X int <= 600;
 const WND_RES_Y int <= 800;
 const INVALID_DX_HANDLE int <= -1;
 const GLOBAL_VOLUME int <= 10;
+const MAX_WELCOME_SOUNDS int <= 6;
 const INFO_WEBSITE string <= "www.aquashell-scripting.com";
 
 global szScriptPath string;
@@ -23,6 +24,7 @@ global hDefFont int;
 global hInfoFont int;
 global hOverlay int;
 global hBanner int;
+global hSndWelcome int;
 global iMouseXPos int;
 global iMouseYPos int;
 global bLinkHover bool;
@@ -30,18 +32,23 @@ global iLinkXPos int;
 global iLinkYPos int;
 global iLinkWidth int;
 global iLinkHeight int;
+global bRunDrawOnce bool;
 
-array arrSoundScriptItems string 10 (
+array arrSoundScriptItems string 14 (
 	"alien",
 	"barnacle",
 	"choose",
 	"computalk",
+	"crowbar",
 	"duty",
 	"freeman",
 	"greetings",
 	"headcrab",
 	"horror",
-	"warning"
+	"houndeye",
+	"siren",
+	"warning",
+	"zombie"
 );
 
 getscriptpath szScriptPath;
@@ -57,6 +64,15 @@ set iLinkXPos <= 159;
 set iLinkYPos <= 750;
 set iLinkWidth <= 235;
 set iLinkHeight <= -15;
+
+set bRunDrawOnce <= false;
+
+function PlayWelcomeSound_OnElapsed bool()
+{
+	dx.snd.play %hSndWelcome %GLOBAL_VOLUME;
+
+	result false;
+};
 
 function checkLinkRange bool()
 {
@@ -91,8 +107,9 @@ function checkLinkRange bool()
 function DXWND_OnCreate void(hWnd int)
 {
     local bGfxInit bool;
+	local iRndNumber int;
 
-    print "Window handle: %hWnd";
+    debug "Window handle: %hWnd";
 
     dx.gfx.initialize %hWnd %WND_WINDOWED %WND_RES_X %WND_RES_Y 0 0 0 0 bGfxInit;
     dx.snd.initialize %hWnd;
@@ -109,7 +126,10 @@ function DXWND_OnCreate void(hWnd int)
 		call loadAssets_%arrSoundScriptItems[%i]() => void;
 	};
 
-    print "DX.Graphics and DX.Sound initialized";
+	random 1 %MAX_WELCOME_SOUNDS iRndNumber;
+	dx.snd.query "%szSoundPath/welcome%iRndNumber.wav" hSndWelcome;
+
+    debug "DX.Graphics and DX.Sound initialized";
 };
 
 function DXWND_OnDraw void()
@@ -122,8 +142,14 @@ function DXWND_OnDraw void()
 
     dx.gfx.drawbegin;
 
-	dx.gfx.drawsprite %hOverlay 1 1 0 0.0 0.0 true 0 0 0 150;
-	dx.gfx.drawsprite %hBanner 1 30 0 0.0 0.0 false 0 0 0 0;
+	if (%bRunDrawOnce, -eq, false) {
+		set bRunDrawOnce <= true;
+
+		aut_addtimer PlayWelcomeSound 1000;
+	};
+
+	dx.gfx.drawsprite %hOverlay 0 0 0 0.0 0.0 true 0 0 0 150;
+	dx.gfx.drawsprite %hBanner 0 0 0 0.0 0.0 false 0 0 0 0;
 	
 	for (i, 0, %arrSoundScriptItems.length, -inc) {
 		call drawButton_%arrSoundScriptItems[%i]() => void;
@@ -182,7 +208,7 @@ function DXWND_OnMouseInput void(x int, y int, iMouseKey int, bDown bool, bCtrlH
 
 function DXWND_OnDestroy void()
 {
-    print "Window destroyed";
+    debug "Window destroyed";
 
     dx.gfx.release;
     dx.snd.release;
